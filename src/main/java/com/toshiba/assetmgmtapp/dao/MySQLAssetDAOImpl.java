@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("mysql")
-@Profile("prod")
-//@Primary
+//@Profile("prod")
+@Primary
 public class MySQLAssetDAOImpl implements AssetDAO {
 
 

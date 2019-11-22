@@ -2,7 +2,9 @@ package com.toshiba.assetmgmtapp.model;
 
 import lombok.*;
 
+import javax.persistence.*;
 import java.io.Serializable;
+import java.lang.annotation.Target;
 
 @Setter
 @Getter
@@ -11,10 +13,15 @@ import java.io.Serializable;
 @EqualsAndHashCode(of = "id")
 @ToString
 @Builder
+@Entity
+@Table(name="assets")
 public class Asset implements Serializable, Comparable<Asset> {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Column(name = "asset_price", nullable = false)
     private double price;
 
     private String name;
