@@ -12,7 +12,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
+        http.authorizeRequests()
+                .antMatchers("/v1/assets/**")
+                .hasAnyRole("ADMIN","USER")
+                .antMatchers("/v1/admin/**")
+                .hasRole("ADMIN")
+                .and()
+                .httpBasic();
     }
 
     @Override
