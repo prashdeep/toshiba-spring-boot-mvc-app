@@ -1,10 +1,17 @@
 package com.toshiba.assetmgmtapp.controller;
 
+import com.toshiba.assetmgmtapp.config.ApplicationConfiguration;
 import com.toshiba.assetmgmtapp.model.Asset;
 import com.toshiba.assetmgmtapp.service.AssetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
@@ -13,6 +20,9 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 public class AssetRestController {
 
     private final AssetService assetService;
+
+    @Autowired
+    private ApplicationConfiguration configurationProperties;
 
     public AssetRestController(AssetService assetService) {
         this.assetService = assetService;
@@ -30,10 +40,23 @@ public class AssetRestController {
 
     @PostMapping(consumes = {APPLICATION_XML_VALUE, APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public Asset saveAsset(@RequestBody Asset asset){
+    public Asset saveAsset( @Valid @RequestBody Asset asset){
         System.out.println("Came inside the save asset method....");
         Asset savedAsset= this.assetService.saveAsset(asset);
         return savedAsset;
+    }
+
+    public ApplicationConfiguration getConfigurationProperties() {
+        return configurationProperties;
+    }
+
+    public void setConfigurationProperties(ApplicationConfiguration configurationProperties) {
+        this.configurationProperties = configurationProperties;
+    }
+
+    @GetMapping("/profile")
+    public String profile(){
+        return "{\"message\":\""+this.configurationProperties.getMessage()+"\"}";
     }
 
 
