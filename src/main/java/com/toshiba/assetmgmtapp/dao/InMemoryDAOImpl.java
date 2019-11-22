@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("inmemory")
-@Profile("dev")
+//@Profile("dev")
 public class InMemoryDAOImpl implements AssetDAO {
 
     private static List<Asset> assets = new ArrayList<>();
