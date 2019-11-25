@@ -4,7 +4,9 @@ import com.toshiba.assetmgmtapp.config.ApplicationConfiguration;
 import com.toshiba.assetmgmtapp.model.Asset;
 import com.toshiba.assetmgmtapp.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +19,13 @@ import static org.springframework.http.MediaType.APPLICATION_XML_VALUE;
 
 @RestController
 @RequestMapping("/v1/assets/")
+@RefreshScope
 public class AssetRestController {
 
     private final AssetService assetService;
+
+    @Value("${custom.message}")
+    private String message;
 
     @Autowired
     private ApplicationConfiguration configurationProperties;
@@ -59,5 +65,9 @@ public class AssetRestController {
         return "{\"message\":\""+this.configurationProperties.getMessage()+"\"}";
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "{message:\" \""+this.message+"\"}";
+    }
 
 }
