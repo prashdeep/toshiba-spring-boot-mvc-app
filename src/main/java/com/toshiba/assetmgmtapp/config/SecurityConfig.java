@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -19,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/v1/assets/**")
                 .hasAnyRole("ADMIN","USER")
@@ -43,13 +45,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .password("admin")
                         .roles("USER","ADMIN");
         */
-        authenticationManagerBuilder.userDetailsService(domainUserDetailsService);
+        authenticationManagerBuilder
+                .userDetailsService(domainUserDetailsService)
+                .passwordEncoder(passwordEncoder());
     }
 
 
 
     @Bean
     public PasswordEncoder passwordEncoder(){
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 }
