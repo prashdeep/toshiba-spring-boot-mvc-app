@@ -15,4 +15,6 @@ public interface AssetService {
     List<Asset> listAll();
 
     Asset findByAssetId(long assetId);
+
+    String fetchOrgById(long id);
 }

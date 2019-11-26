@@ -42,4 +42,9 @@ public class AssetServiceImpl implements AssetService {
     public Asset findByAssetId(long assetId) {
         return this.assetDAO.findById(assetId).orElseThrow(() -> new IllegalArgumentException("Asset not present"));
     }
+
+    @Override
+    public String fetchOrgById(long id) {
+        return null;
+    }
 }

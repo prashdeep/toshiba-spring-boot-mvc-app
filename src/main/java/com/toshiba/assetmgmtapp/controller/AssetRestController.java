@@ -70,4 +70,11 @@ public class AssetRestController {
         return "{message:\" \""+this.message+"\"}";
     }
 
+
+    @GetMapping("/organization/{id}")
+    public String fetchOrganizationById(@PathVariable("id") long id){
+        return this.assetService.fetchOrgById(id);
+
+    }
+
 }
