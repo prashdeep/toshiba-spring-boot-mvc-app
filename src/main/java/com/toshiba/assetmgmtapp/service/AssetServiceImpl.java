@@ -1,6 +1,7 @@
 package com.toshiba.assetmgmtapp.service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.toshiba.assetmgmtapp.client.OrganizationFeignClient;
 import com.toshiba.assetmgmtapp.dao.AssetDAO;
 import com.toshiba.assetmgmtapp.model.Asset;
@@ -64,7 +65,9 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    @HystrixCommand(fallbackMethod = "fallbackMethod")
+    @HystrixCommand(threadPoolKey = "", commandProperties = {
+
+    })
     public String fetchOrgById(long id) {
         /*
         //Naive way of implementing the discovery client
