@@ -1,5 +1,6 @@
 package com.toshiba.assetmgmtapp.service;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.toshiba.assetmgmtapp.client.OrganizationFeignClient;
 import com.toshiba.assetmgmtapp.dao.AssetDAO;
 import com.toshiba.assetmgmtapp.model.Asset;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class AssetServiceImpl implements AssetService {
@@ -26,8 +28,8 @@ public class AssetServiceImpl implements AssetService {
     @Autowired
     private  DiscoveryClient discoveryClient;
 
-    @Autowired
-    private OrganizationFeignClient organizationFeignClient;
+   // @Autowired
+   // private OrganizationFeignClient organizationFeignClient;
 
 
     //public AssetServiceImpl(@Qualifier("inmemory") AssetDAO assetDAO)  - Using @Qualifier
@@ -62,6 +64,7 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
+    @HystrixCommand(fallbackMethod = "fallbackMethod")
     public String fetchOrgById(long id) {
         /*
         //Naive way of implementing the discovery client
@@ -70,16 +73,37 @@ public class AssetServiceImpl implements AssetService {
         ResponseEntity<String> response = restTemplate
                 .exchange(serviceUrl+"/v1/organization/"+id , HttpMethod.GET, null, String.class);
         */
+        return fetchOrganizationWithRibbon(id);
+        // return organizationFeignClient.getOrganizationById(id).toString();
+    }
 
-        /*
-            Use Ribbon for LoadBalancing
-            ResponseEntity<String> response = this.restTemplate.exchange("http://organizationservice/v1/organization/55",HttpMethod.GET, null, String.class);
-            System.out.println(response.getStatusCode());
-            System.out.println(response.getStatusCodeValue());
-         */
+    public String fetchOrganizationWithRibbon(long id){
+        latency();
+        //  Use Ribbon for LoadBalancing
+        ResponseEntity<String> response = this.restTemplate.exchange("http://organizationservice/v1/organization/"+id,HttpMethod.GET, null, String.class);
+        System.out.println(response.getStatusCode());
+        System.out.println(response.getStatusCodeValue());
+        return response.getBody();
+    }
 
+    public String fallbackMethod(long id){
+        return "Default message";
+    }
 
-        return organizationFeignClient.getOrganizationById(id).toString();
+    private void latency(){
+        Random random = new Random();
+        int value = random.nextInt(3) + 1;
+        if (value == 3){
+            System.out.println("*************");
+            System.out.println("Came inside ");
+            System.out.println("*************");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public DiscoveryClient getDiscoveryClient() {
