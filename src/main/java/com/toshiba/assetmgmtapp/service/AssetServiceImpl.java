@@ -1,5 +1,6 @@
 package com.toshiba.assetmgmtapp.service;
 
+import com.toshiba.assetmgmtapp.client.OrganizationFeignClient;
 import com.toshiba.assetmgmtapp.dao.AssetDAO;
 import com.toshiba.assetmgmtapp.model.Asset;
 import com.toshiba.assetmgmtapp.repository.AssetRepository;
@@ -20,7 +21,13 @@ public class AssetServiceImpl implements AssetService {
     private final AssetRepository assetDAO;
 
     @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
     private  DiscoveryClient discoveryClient;
+
+    @Autowired
+    private OrganizationFeignClient organizationFeignClient;
 
 
     //public AssetServiceImpl(@Qualifier("inmemory") AssetDAO assetDAO)  - Using @Qualifier
@@ -56,13 +63,23 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public String fetchOrgById(long id) {
+        /*
+        //Naive way of implementing the discovery client
         RestTemplate restTemplate = new RestTemplate();
         String serviceUrl = this.discoveryClient.getInstances("organizationservice").get(0).getUri().toString();
         ResponseEntity<String> response = restTemplate
                 .exchange(serviceUrl+"/v1/organization/"+id , HttpMethod.GET, null, String.class);
+        */
+
+        /*
+            Use Ribbon for LoadBalancing
+            ResponseEntity<String> response = this.restTemplate.exchange("http://organizationservice/v1/organization/55",HttpMethod.GET, null, String.class);
+            System.out.println(response.getStatusCode());
+            System.out.println(response.getStatusCodeValue());
+         */
 
 
-        return response.getBody();
+        return organizationFeignClient.getOrganizationById(id).toString();
     }
 
     public DiscoveryClient getDiscoveryClient() {
