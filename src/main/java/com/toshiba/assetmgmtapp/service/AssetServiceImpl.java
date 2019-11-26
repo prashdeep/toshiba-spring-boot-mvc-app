@@ -3,7 +3,14 @@ package com.toshiba.assetmgmtapp.service;
 import com.toshiba.assetmgmtapp.dao.AssetDAO;
 import com.toshiba.assetmgmtapp.model.Asset;
 import com.toshiba.assetmgmtapp.repository.AssetRepository;
+import net.bytebuddy.asm.Advice;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +18,10 @@ import java.util.Optional;
 public class AssetServiceImpl implements AssetService {
 
     private final AssetRepository assetDAO;
+
+    @Autowired
+    private  DiscoveryClient discoveryClient;
+
 
     //public AssetServiceImpl(@Qualifier("inmemory") AssetDAO assetDAO)  - Using @Qualifier
     public AssetServiceImpl(AssetRepository assetDAO) {
@@ -45,6 +56,20 @@ public class AssetServiceImpl implements AssetService {
 
     @Override
     public String fetchOrgById(long id) {
-        return null;
+        RestTemplate restTemplate = new RestTemplate();
+        String serviceUrl = this.discoveryClient.getInstances("organizationservice").get(0).getUri().toString();
+        ResponseEntity<String> response = restTemplate
+                .exchange(serviceUrl+"/organization/"+id , HttpMethod.GET, null, String.class);
+
+
+        return response.getBody();
+    }
+
+    public DiscoveryClient getDiscoveryClient() {
+        return discoveryClient;
+    }
+
+    public void setDiscoveryClient(DiscoveryClient discoveryClient) {
+        this.discoveryClient = discoveryClient;
     }
 }
