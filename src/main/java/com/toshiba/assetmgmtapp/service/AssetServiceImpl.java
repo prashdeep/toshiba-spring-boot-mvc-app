@@ -59,7 +59,7 @@ public class AssetServiceImpl implements AssetService {
         RestTemplate restTemplate = new RestTemplate();
         String serviceUrl = this.discoveryClient.getInstances("organizationservice").get(0).getUri().toString();
         ResponseEntity<String> response = restTemplate
-                .exchange(serviceUrl+"/organization/"+id , HttpMethod.GET, null, String.class);
+                .exchange(serviceUrl+"/v1/organization/"+id , HttpMethod.GET, null, String.class);
 
 
         return response.getBody();
