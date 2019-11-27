@@ -4,7 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.toshiba.assetmgmtapp.client.OrganizationFeignClient;
 import com.toshiba.assetmgmtapp.dao.AssetDAO;
-import com.toshiba.assetmgmtapp.events.soiurce.SimpleSourceBean;
+import com.toshiba.assetmgmtapp.events.source.SimpleSourceBean;
 import com.toshiba.assetmgmtapp.model.Asset;
 import com.toshiba.assetmgmtapp.repository.AssetRepository;
 import net.bytebuddy.asm.Advice;

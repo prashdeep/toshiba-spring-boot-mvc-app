@@ -1,4 +1,4 @@
-package com.toshiba.assetmgmtapp.events.soiurce;
+package com.toshiba.assetmgmtapp.events.source;
 
 import com.toshiba.assetmgmtapp.model.Asset;
 import com.toshiba.assetmgmtapp.util.UserContext;
