@@ -70,18 +70,16 @@ public class AssetServiceImpl implements AssetService {
     }
 
     @Override
-    @HystrixCommand(threadPoolKey = "", commandProperties = {
-
-    })
+   // @HystrixCommand
     public String fetchOrgById(long id) {
-        /*
+
         //Naive way of implementing the discovery client
-        RestTemplate restTemplate = new RestTemplate();
+        //RestTemplate restTemplate = new RestTemplate();
         String serviceUrl = this.discoveryClient.getInstances("organizationservice").get(0).getUri().toString();
-        ResponseEntity<String> response = restTemplate
+        ResponseEntity<String> response = this.restTemplate
                 .exchange(serviceUrl+"/v1/organization/"+id , HttpMethod.GET, null, String.class);
-        */
-        return fetchOrganizationWithRibbon(id);
+        return response.getBody();
+        //return fetchOrganizationWithRibbon(id);
         // return organizationFeignClient.getOrganizationById(id).toString();
     }
 

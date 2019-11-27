@@ -21,6 +21,7 @@ public class UserContextFilter implements Filter {
                 .getContext().setCorrelationId(httpServletRequest.getHeader(UserContext.CORRELATION_ID));
         System.out.println("***************");
         System.out.println(httpServletRequest.getHeader(UserContext.CORRELATION_ID));
+        System.out.println(">>>> "+UserContextHolder.getContext().getCorrelationId());
         System.out.println("***************");
         filterChain
                 .doFilter(httpServletRequest, servletResponse);
