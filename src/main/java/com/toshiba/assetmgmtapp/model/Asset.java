@@ -34,4 +34,13 @@ public class Asset implements Serializable, Comparable<Asset> {
     public int compareTo(Asset asset) {
         return (int) (this.id - asset.id);
     }
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "id=" + id +
+                ", price=" + price +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

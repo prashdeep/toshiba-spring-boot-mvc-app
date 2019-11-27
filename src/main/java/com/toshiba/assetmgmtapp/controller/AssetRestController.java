@@ -46,8 +46,8 @@ public class AssetRestController {
 
     @PostMapping(consumes = {APPLICATION_XML_VALUE, APPLICATION_JSON_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public Asset saveAsset( @Valid @RequestBody Asset asset){
-        System.out.println("Came inside the save asset method....");
+    public Asset saveAsset(  @RequestBody Asset asset){
+        System.out.println("Came inside the save asset method.... "+ asset);
         Asset savedAsset= this.assetService.saveAsset(asset);
         return savedAsset;
     }
